@@ -46,14 +46,10 @@ typedef vector<vs> vvs;
 #define sz(x) (int)(x).size()
 #define all(v)  v.begin(), v.end()
 #define rall(v) v.rbegin(),v.rend()
-
 #define lwb(c, x)  distance((c).begin(), lower_bound(all(c), (x))) // first elt >= 
 #define lbg(c, x)  distance((c).begin(), lower_bound(all(c), (x), greater{}))
 #define upb(c, x)  distance((c).begin(), upper_bound(all(c), (x))) // fist elt >
 #define ubg(c, x)  distance((c).begin(), upper_bound(all(c), (x), greater{}))
-
-#define argmax(c)  distance((c).begin(), max_element(all(c)) )
-#define argmin(c)  distance((c).begin(), min_element(all(c)) )
 
 
 #define f first
@@ -72,13 +68,8 @@ template<class T> using ordered_multiset = tree<T,  null_type, less_equal<T>,  r
 
 template<class T> using minpq = pq<T, vector<T>, greater<T>>;
 template<class T> using vset  = vector<set<T>>;
-
-
 template<typename T> bool chkmax(T &m, const T q) { return m < q ? (m = q, true) : false; }
 template<typename T> bool chkmin(T &m, const T q) { return m > q ? (m = q, true) : false; }
-
-template<typename T> void unique( vector<T> &arr ) { sort(all(arr));  arr.erase( unique( all(arr) ), arr.end() );  }
-
 
 template<typename T> ostream& operator<<(ostream& out, vector<T> &a) {for (auto &x : a) out << x << ' '; return out;};
 template<typename T> istream& operator>>(istream& cin, vector<T> &a) {for (auto &x : a) cin >> x;        return cin;};
@@ -143,11 +134,89 @@ void NO() { cout << "No"  << endl;  }
 
 
 
+#define argmax(c)  distance((c).begin(), max_element(all(c)) )
+#define argmin(c)  distance((c).begin(), min_element(all(c)) )
 
 
+const int RED = 1, BLEU = 2;
 
 int resolve(){
+	int n; cin >>n;
+	vvi adj;
 
+	adj = vvi(n);
+	FOR(i, 0, n-1){
+		int u, v;  cin >> u >>v; u--; v--;
+		adj[u].push_back(v);
+		adj[v].push_back(u);
+	}
+
+	vl c_dist(n, 0ll);
+	function<void(int, int , ll)> dfs_dist =  [&](int u, int p, ll d)  -> void {
+		c_dist[u] = d;
+		trav(x, adj[u]) if(x != p){
+			dfs_dist(x, u, d+1ll);
+		}
+	};
+	
+	vi path;
+	vi c_path;
+	function<void(int, int, int)> dfs_path = [&](int u, int p, int dest) -> void{
+		c_path.push_back(u);
+		if(u == dest){
+			path = c_path;
+		}
+		trav(x, adj[u])if(x != p){
+			dfs_path(x, u, dest);
+		}
+		c_path.pop_back();
+	};
+
+	// tree diameter and its ends and the path between them
+	dfs_dist(0, -1, 0);
+	int end_a = argmax( c_dist );
+	fill(all(c_dist), 0ll);
+	dfs_dist(end_a, -1, 0);
+	int end_b = argmax( c_dist );
+	ll diam = c_dist[end_b] ;
+
+	dfs_path(end_a,  -1, end_b  );
+
+
+	//color diameter;
+	vb on_path(n, false);
+	vi color(n);
+	ll red = 0ll, bleu = 0ll;
+	FOR(i, 0, sz(path)){
+		int u = path[i];
+		if(i <= diam/2){
+			color[u] = RED;
+			red++;
+
+		}else{
+			color[u] = BLEU;
+			bleu++;
+		}
+
+		on_path[u] = true;
+
+	}
+
+	//color other vertice not on diameter path
+	FOR(i, 0, n)if(!on_path[i]){
+		if(red <= bleu){
+			color[i] = RED; red++;
+		}else{
+			color[i] = BLEU; bleu++;
+		}
+	}
+
+	assert(abs(red - bleu) <= 1);
+
+	trav(x, color){
+		if(x == RED){cout << "R";}
+		else{cout << "B";}
+	}cout << endl;
 
     return 0;
 }

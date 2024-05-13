@@ -143,11 +143,60 @@ void NO() { cout << "No"  << endl;  }
 
 
 
-
+typedef pair<ll, int> pli;
 
 
 int resolve(){
+    int n, m; cin >>n >>m;
+    // vvi adj(n), adj_rev(n);
+    vector<vector<pli>> edges(m);
+    FOR(i, 0, m){
+        int a, b; ll c;
+        cin >> a >> b >> c; a--; b--;
+        edges[a].push_back({c, b});
+    }
 
+
+    
+    vb visited(n, false);
+    vl min_price(n, maxint), nbr_routes(n, 0ll), min_routes(n, maxint), max_routes(n, minint);
+    function<void(int)> bfs = [&](int root) -> void{
+        minpq<pli> qu; qu.push({0ll, root});
+        min_price[root] = 0ll;
+        nbr_routes[root] = 1ll;
+        min_routes[root] = max_routes[root] = 0ll;
+
+
+        while (!qu.empty())
+        {
+            pli node = qu.top(); qu.pop();
+            if(min_price[node.s] < node.f){continue;}
+
+            trav(x, edges[node.s]){
+
+                if(  min_price[x.s] > node.f + x.f  ){
+                    chkmin( min_price[x.s], node.f + x.f  );
+                    nbr_routes[x.s] = nbr_routes[node.s];
+                    min_routes[x.s] = min_routes[node.s]+1ll;
+                    max_routes[x.s] = max_routes[node.s]+1ll;
+
+                    qu.push({min_price[x.s], x.s  });
+
+                }else if(  min_price[x.s] == node.f + x.f   ){
+                    nbr_routes[x.s] += nbr_routes[node.s];
+                    nbr_routes[x.s] %= MOD;
+                    chkmin(min_routes[x.s], min_routes[node.s]+1ll);
+                    chkmax(max_routes[x.s], max_routes[node.s]+1ll);
+                }
+
+            }
+        }
+    };
+
+    int src = 0, dest = n-1;
+    bfs(src);
+
+    cout << min_price[dest] << " " << nbr_routes[dest] << " " <<  min_routes[dest] << " " <<  max_routes[dest] << endl;
 
     return 0;
 }
@@ -161,7 +210,7 @@ int main() {
 	
     fast();
 
-    int TT = 1;   cin>>TT;
+    int TT = 1;   //cin>>TT;
 	for (int tt = 1; tt <= TT; tt++) 
 	{
 

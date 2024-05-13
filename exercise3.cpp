@@ -144,11 +144,55 @@ void NO() { cout << "No"  << endl;  }
 
 
 
+int minCost(vector<int>& nums, int k) {
+	
+	int n = sz(nums);
+
+	vvi trimmed(n, vi(n, 0));
+	FOR(i, 0, n){
+
+		unordered_map<int, int> cnt;
+		int _cnt = 0;
+		FOR(j, i, n){
+			if(cnt.find(nums[j]) == cnt.end()){
+				cnt[nums[j]]++;
+			}
+			else if( cnt[nums[j]] == 1 ){
+				cnt[nums[j]]++;
+				_cnt+=2;
+			}else{
+				cnt[nums[j]]++;
+				_cnt++;
+			}
+
+			trimmed[i][j]=_cnt;
+		}
+	}
+
+
+
+	auto cost = [&] (int i, int j) -> ll{
+		return k + trimmed[i][j];
+	};
+
+	vl dp(n+1, maxint);
+	FOR(i, 0, n){
+		FOR(j, i, n){
+			dp[j+1] = chkmin(dp[j+1], dp[i] + cost(i, j)) ;
+		}
+	}
+
+	return dp[n-1];
+}
+
+
 
 
 int resolve(){
+	vi nums = {1,2,1,2,1,3,3};
+	int k = 2;
 
-
+	minCost(nums, k);
     return 0;
 }
 
@@ -161,7 +205,7 @@ int main() {
 	
     fast();
 
-    int TT = 1;   cin>>TT;
+    int TT = 1;   //cin>>TT;
 	for (int tt = 1; tt <= TT; tt++) 
 	{
 

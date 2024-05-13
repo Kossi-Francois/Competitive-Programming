@@ -144,10 +144,90 @@ void NO() { cout << "No"  << endl;  }
 
 
 
+int numberOfStableArrays(int zero, int one, int limit) {
+
+	unordered_map<string, ll> memo;
+
+	auto keys = [](int a, int b, int c, int d){
+		return to_string(a)+ "--->" + to_string(b)+ "+++>" + to_string(c)+ "***>"  +to_string(d);
+	};
+	
+
+	function<ll(int, int, int, int)> dp = [&] (int prev, int cnt, int zz, int oo) -> ll{
+		
+		if( zz == 0 && oo == 0 && cnt <= limit ){return 1ll;}
+
+		if(  (cnt > limit) || (zz < 0) || (oo < 0 )  ){
+			return 0;
+		}
+
+		string key = keys(prev, cnt, zz, oo  );
+		if(memo.find(key) !=memo.end()){
+			return memo[key];
+		}
+
+
+		ll ans = 0;
+		FOR(i, 1, limit+1){
+
+			ans += (dp( 0, (prev == 0? cnt + i : 1  ), zz-i, oo   ) )%MOD ; 
+			ans %= MOD; 
+			ans += dp( 1, (prev == 1? cnt + i : 1  ), zz, oo-i   ) %MOD ;  
+			ans %= MOD; 
+
+			debug();
+		}
+
+		return memo[key] =  ans%MOD;
+
+	};
+
+
+
+	return dp(-1, 0, zero, one  );
+
+}
+
+
+
+int smallestDistancePair(vector<int>& nums, int k) {
+	sort(all(nums));
+	int n = sz(nums);
+
+	minpq<pair<ll, pii>> pqu;
+	FOR(i, 1, n){
+		pqu.push({ abs(nums[i] - nums[0]),  {i, 0}});
+	}
+
+	int res;
+	while (--k>=0)
+	{
+		pair<ll, pii> top = pqu.top(); pqu.pop();
+
+		res = top.first;
+
+		int next = top.s.s + 1;
+
+		if(next <= top.s.f  - 1){
+			pqu.push({ abs(nums[top.s.f] - nums[next])   ,  {top.s.f,  next } });
+			debug();
+		}
+
+	}
+
+	return res;
+
+}
+
 
 
 int resolve(){
-
+	// vvi inp = {{1}, {1}};
+	// int zero = 3, one = 3, limit = 2;
+	// numberOfStableArrays( zero,  one,  limit);
+	vi arr = {1,6,1}; int k = 3;
+	int ans = smallestDistancePair(arr, k);
+	cout << ans << endl;
 
     return 0;
 }
@@ -161,7 +241,7 @@ int main() {
 	
     fast();
 
-    int TT = 1;   cin>>TT;
+    int TT = 1;   //cin>>TT;
 	for (int tt = 1; tt <= TT; tt++) 
 	{
 

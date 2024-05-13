@@ -147,7 +147,38 @@ void NO() { cout << "No"  << endl;  }
 
 
 int resolve(){
+	int n; ll q; cin >> n>> q;
 
+	int m = 30;//(int) log2(q) + 2;
+	n++;
+
+	// next[j][x] == planet reached from x after taking 2**j steps
+	vvl next(m, vl(n, -1ll));
+	FOR(i, 1, n){
+		int u; cin >> u; //u--; // teleport i to u ==>  i --> u
+		next[0][i] = u;
+	}
+
+	FOR(j, 1, m){
+		FOR(i, 1, n){
+			next[j][i] = next[ j-1  ][ next[j-1][i]  ];
+		}
+	}
+
+
+	auto jump = [&](int x, ll k) -> int{
+
+		FOR(i, 0, m)if(k & (1<<i ) ){
+			x = next[i][x];
+		}
+		return x;
+	};
+
+
+	FOR(j, 0, q){
+		int x; ll k; cin >> x >> k; //x--;
+		cout << jump(x, k)  << endl;
+	}
 
     return 0;
 }
@@ -161,7 +192,7 @@ int main() {
 	
     fast();
 
-    int TT = 1;   cin>>TT;
+    int TT = 1;   //cin>>TT;
 	for (int tt = 1; tt <= TT; tt++) 
 	{
 

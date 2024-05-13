@@ -143,11 +143,45 @@ void NO() { cout << "No"  << endl;  }
 
 
 
+//primes factor decomposition
+map<ll, ll> primeFactors(ll n)  
+
+{  
+  map<ll, ll> res;
+
+  while (n%2 == 0)
+  {
+    res[2]++;
+    n/=2;
+    /* code */
+  }
+
+
+    FORK(i, 3, sqrt(n)+1, 2){
+        while (n%i==0)
+        {
+            res[i]++;
+            n/=i;
+            /* code */
+        }
+    }
+
+    if(n>2){
+        res[n]++;
+    }
+
+    return res;
+  
+}  
 
 
 
 int resolve(){
+  ll n = 600851475143; //6857
 
+  map<ll, ll> ans = primeFactors(n);
+
+  ll res =   (*ans.rbegin()).f;
 
     return 0;
 }
