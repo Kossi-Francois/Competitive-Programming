@@ -19,9 +19,18 @@ $
 
 ############# bitwise properties
 
-1.||  ==>  X∣Y ≤ X+Y always. Further, they are equal if and only if X and Y don't have any common bits.
-2.⊕  ==>  XOR is an involution, i.e, X⊕Y=Z ==> X=Z⊕Y.
+1. ||  ==>  X∣Y ≤ X+Y always. Further, they are equal if and only if X and Y don't have any common bits.
+
+2. ⊕  ==>  XOR is an involution, i.e, X⊕Y=Z ==> X=Z⊕Y.
+
 3. &  ==>  X is submask(meaning any bit set in X will also be set in Y)  of Y ==> X & Y = X  :: => x & y = z, then x & z = z and y & z = z.
+
+4. $x+y = (x\oplus y) + 2\cdot (x\ \&\ y)$ ; Futhermore $\left\lfloor \frac{x\oplus y}{2} \right\rfloor = \left\lfloor \frac{x}{2}\oplus \frac{y}{2}\right\rfloor = \left\lfloor \frac{x}{2}\right\rfloor \oplus \left\lfloor\frac{y}{2}\right\rfloor$
+
+5. given three integers $x, y, z$ such that
+$x \lt y \lt z$, we always have $\min(x\oplus y, y\oplus z) \lt x\oplus z$.  This means that given any set of integers, the minimum bitwise XOR between some pair of them will always be obtained by some adjacent pair in sorted order.
+
+
 
 
 ########### 2D Matrix
@@ -45,3 +54,6 @@ https://codeforces.com/blog/entry/106451
 
 https://github.com/kamyu104/MetaHackerCup-2022
     
+
+
+https://github.com/kamyu104/MetaHackerCup-2023

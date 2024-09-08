@@ -9,13 +9,19 @@ using namespace std;
 #include <ext/pb_ds/tree_policy.hpp> 
 using namespace __gnu_pbds;
 
+// #include <ext/rope> //header with rope
+// using namespace __gnu_cxx; //namespace with rope and some additional stuff
+
 
 //int64_t // uint64_t
 typedef long long ll;
 typedef long double ld;
 typedef pair<int, int> pii;
-typedef pair<ll,ll> pll;
-typedef pair<ld,ld> pld;
+typedef pair<ll, ll> pll;
+typedef pair<ld, ld> pld;
+typedef pair<ll, int> pli;
+typedef pair<ll, pii> plii;
+
 
 typedef vector<int> vi;
 typedef vector<ld> vld;
@@ -55,6 +61,9 @@ typedef vector<vs> vvs;
 #define argmax(c)  distance((c).begin(), max_element(all(c)) )
 #define argmin(c)  distance((c).begin(), min_element(all(c)) )
 
+#define not_in(c, x)  c.find(x) == c.end()
+#define  is_in(c, x)  c.find(x) != c.end()
+
 
 #define f first
 #define s second
@@ -68,9 +77,11 @@ typedef vector<vs> vvs;
 
 
 template<class T> using ordered_set      = tree<T,  null_type, less<T>,        rb_tree_tag, tree_order_statistics_node_update> ;
-template<class T> using ordered_multiset = tree<T,  null_type, less_equal<T>,  rb_tree_tag, tree_order_statistics_node_update> ;
+template<class T> using ordered_multiset = tree<T,  null_type, less_equal<T>,  rb_tree_tag, tree_order_statistics_node_update> ; //erase with oset.erase(oset.upper_bound(value))
 
 template<class T> using minpq = pq<T, vector<T>, greater<T>>;
+// #define pqnode(comp) template<class T> pq<T, vector<T>, decltype( comp ) > pqvar( comp );
+
 template<class T> using vset  = vector<set<T>>;
 
 
@@ -143,60 +154,11 @@ void NO() { cout << "No"  << endl;  }
 
 
 
-typedef pair<ll, int> pli;
+
 
 
 int resolve(){
-    int n, m; cin >>n >>m;
-    // vvi adj(n), adj_rev(n);
-    vector<vector<pli>> edges(m);
-    FOR(i, 0, m){
-        int a, b; ll c;
-        cin >> a >> b >> c; a--; b--;
-        edges[a].push_back({c, b});
-    }
 
-
-    
-    vb visited(n, false);
-    vl min_price(n, maxint), nbr_routes(n, 0ll), min_routes(n, maxint), max_routes(n, minint);
-    function<void(int)> bfs = [&](int root) -> void{
-        minpq<pli> qu; qu.push({0ll, root});
-        min_price[root] = 0ll;
-        nbr_routes[root] = 1ll;
-        min_routes[root] = max_routes[root] = 0ll;
-
-
-        while (!qu.empty())
-        {
-            pli node = qu.top(); qu.pop();
-            if(min_price[node.s] < node.f){continue;}
-
-            trav(x, edges[node.s]){
-
-                if(  min_price[x.s] > node.f + x.f  ){
-                    chkmin( min_price[x.s], node.f + x.f  );
-                    nbr_routes[x.s] = nbr_routes[node.s];
-                    min_routes[x.s] = min_routes[node.s]+1ll;
-                    max_routes[x.s] = max_routes[node.s]+1ll;
-
-                    qu.push({min_price[x.s], x.s  });
-
-                }else if(  min_price[x.s] == node.f + x.f   ){
-                    nbr_routes[x.s] += nbr_routes[node.s];
-                    nbr_routes[x.s] %= MOD;
-                    chkmin(min_routes[x.s], min_routes[node.s]+1ll);
-                    chkmax(max_routes[x.s], max_routes[node.s]+1ll);
-                }
-
-            }
-        }
-    };
-
-    int src = 0, dest = n-1;
-    bfs(src);
-
-    cout << min_price[dest] << " " << nbr_routes[dest] << " " <<  min_routes[dest] << " " <<  max_routes[dest] << endl;
 
     return 0;
 }
@@ -210,7 +172,7 @@ int main() {
 	
     fast();
 
-    int TT = 1;   //cin>>TT;
+    int TT = 1;   cin>>TT;
 	for (int tt = 1; tt <= TT; tt++) 
 	{
 
