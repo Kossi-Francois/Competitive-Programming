@@ -123,13 +123,6 @@ bool checkBorder (pii x){
 
 
 
-
-
-
-
-
-
-
 ///////////----------------------------/////////////////////
 
 
@@ -371,7 +364,6 @@ class Graph{
 
 
 
-
 ////////////// DSU /////////////////////////
 
 class DSU {  // DSU with  {path compression +  union by rank}
@@ -440,12 +432,7 @@ class DSU {  // DSU with  {path compression +  union by rank}
 };
 
 
-
 /////////////-------------------------------------------------------------------------/////////////////////
-
-
-
-
 
 
 
@@ -593,6 +580,7 @@ class SCCGraph{
 
 
 ////////////////////////////////------------------------------------------------------------------------////////////////////////////////
+
 
 
 
@@ -755,129 +743,3 @@ class MAX_FLOW{
 
 ////////////////////////////////------------------------------------------------------------------------////////////////////////////////
 
-
-
-
-
-
-
-
-
-
-///////// ------- CSES -------------////
-
-
-   // Coin Collector ==> https://cses.fi/problemset/task/1686
-   // Strongly connected composant and Graph condensation
-   //
-   // Solution
-   //    - SCC with Kosaraju algo
-   //    - Condensation graph by connecting each SCC which share an edge
-   //    - use dp in dfs fashion (in topo order ==> process scc with outdegree == 0 first a.k.a last rec call) to find scc children with max coins for each scc
-
-
-// -----------------------------------------------------------------------------------------------------------
-
-   // Mail Delivery ==> https://cses.fi/problemset/task/1691
-   // Eulerian graph with Hierholzer's algorithm
-   //    -undirected graph:
-   //            . Single connected component 
-   //            . for v €[0, n[,  degree[v]%2 == 0  (should be even, except exactly two in case of Eulerian path)
-   //            . An assignment of eulerian cycle for the undireced graph gives a strongly connected component (directed graph)
-
-      // Solution:
-      //    -Find Eulerian cycle in the indirected graph
-      //       . check if degree of each vertice is even
-      //       . start DFS at a vertice (the the post office), remove unvisited edge from this edge and rec DFS, add edge to path
-      //       . check if path size == nbr edge + 1, to chek if the graph is connected
-
-
-
-//   --------------------------------------------------------------------------------------------------
-
-
-   // De Bruijn Sequence ==> https://cses.fi/problemset/task/1691
-   //	  - Bruijn sequence of order n on a size-k alphabet A is a cyclic sequence in which every possible length-n string on A occurs exactly once as a substring
-   //	  - can be solved by constructing a directed graph with k^(n-1) nodes with each node having k outgoing edges.
-   //	  - each neighboring node can be obtained by 1-left shiftting current node and appnding at the end an element from the alaphabet (eg n=3, k=2; 000 -> 001 -> 010/011)
-   //    - every node in this graph has equal in-degree and out-degree, which means that a Eulerian circuit exists in this graph:
-
-
-      // Solution: ( Implementation: Eulerian graph with Hierholzer's algorithm )[ https://www.geeksforgeeks.org/de-bruijn-sequence-set-1/ ]
-      //    -Find Eulerian cycle in the directed graph
-      //       . start DFS at any node (eg. alphabet[0] * (n-1))
-      //       . In DFS, go to all not seen nodes, through edges, with each node having k outgoing edges (all elements of alphabet ), then add current edge to path
-      //       . build the actual sequence
-
-
-////////////////////////////////////////
-
-
-
-
-//   --------------------------------------------------------------------------------------------------
-
-
-   // Teleporters Path ==> https://cses.fi/problemset/task/1693
-   //	  - Eulerian Path
-   //	  - Directed graph
-   //	  - Single connected component
-   //     - in_degree[i] == out_degree[i]  (except for two in case of a path an not a cycle)
-
-
-      // Solution: ( Implementation: Eulerian graph with Hierholzer's algorithm )
-      //    -Find Eulerian path in the directed graph
-      //    . compute in_deggre[i] and out_degree[i]
-	   //		. check if pathe exist; as we going (with 1-indexed array) from node 1 to node n, to have a valid Euler Path :
-	   //				   * in_degree[i] == out_degree[i]  for i € [2, n-1]
-	   // 			   * out_degree[1] - in_degree[1] == 1 == in_degree[n] - out_degree[n] 
-	   //						      ==> we have to go out of node 1 one more time than we go in, we have to go in node n on more time than we go out,
-	
-      //    . In DFS, go to all not seen edges, through nodes
-      //    . build the actual path
-	   //	   . check single connected component (sz(path) != nbr_node+1) and path end at node n (path.back() != n)
-
-
-////////////////////////////////////////
-
-
-
-
-
-//   --------------------------------------------------------------------------------------------------
-
-
-   // [Hamiltonian Flights](https://cses.fi/problemset/task/1690)
-   //	  - Hamiltonian Path
-   //	  - Directed graph
-   //	  - [Algorithm of Bellman, Held, and Karp] (https://en.wikipedia.org/wiki/Hamiltonian_path_problem ) ==> [DP + Bit masking] (https://codeforces.com/blog/entry/337)
-   //           . define  dp[mask][i] as the number of Hamiltonian Paths, of the subset graph encoded as mask, and ending at vertex i;
-   //		    . dp[mask][i] = sum for each vertex k in mask, dp[{mask}-i][k] * number_path(k to i)
-
-      // Solution: ( Implementation: Bellman, Held, and Karp algo )
-      //    -Count the number of edge between each pair of vertice
-      //    -Init dp[mask == 1][source == 0] = 1 : only one Hamiltonian path in subgraph{0==source} ending at 0 == source
-	   //    - Compute dp[mask][i]
-	   //    - return dp[full_mask][dest]
-	   
-
-
-////////////////////////////////////////
-
-
-
-
-//   --------------------------------------------------------------------------------------------------
-
-
-   // [Download Speed](https://cses.fi/problemset/task/1694)
-   //	  - [Maximum flow problem] (https://en.wikipedia.org/wiki/Maximum_flow_problem)
-   //	  - Find Max Flow on directed Graph
-
-
-		// Solution: Edmonds-Karp algorithm, an implementation of the Ford-Fulkerson method using BFS
-		// 		-write a BFS which only traverses edges (u, v) for which the next vertex v is not yet visited and capacity[u][v] > 0, and return the minimum capacity along this path when we find the vertex sink
-		// 		-while such path exists with delta_flow = minimum_capacity > 0, update flow += delta, fo all edges (u, v) in this path (capacity[u][v] -= delta_flow; capacity[v][u] -= delta_flow  )
-
-
-////////////////////////////////////////

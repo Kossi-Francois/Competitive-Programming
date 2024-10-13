@@ -39,6 +39,7 @@ typedef vector<vs> vvs;
 
 #define tcT template<class T
 #define tcTU tcT, class U
+tcT > using VT = vector<T>;
 
 #define FORK(i, a, b, k) for (int i=a; i<(b); i+=k)
 #define FOR(i, a, b) FORK(i, a, b, 1)
@@ -107,9 +108,11 @@ ll const modInv4 = 250000002LL;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
-const ll maxint = numeric_limits<ll>::max() - 100ll;
-const ll minint = numeric_limits<ll>::min() + 100ll;
+const ll maxintll = numeric_limits<ll>::max() - 100ll;
+const ll minintll = numeric_limits<ll>::min() + 100ll;
 
+const int maxint = numeric_limits<int>::max() - 100;
+const int minint = numeric_limits<int>::min() + 100;
 
 
 
@@ -157,7 +160,7 @@ void NO() { cout << "No"  << endl;  }
 
 
 
-int resolve(){
+ll resolve(){
 
 
     return 0;
@@ -169,6 +172,7 @@ int resolve(){
 
 int main() {
 	
+	std::clock_t prog_start_time = std::clock();
 	
     fast();
 
@@ -184,7 +188,15 @@ int main() {
     
 	}
 
-
+	double prog_runtime = ( std::clock() - prog_start_time ) / (double) CLOCKS_PER_SEC;
 	return 0;
 }
 
+
+
+// don't funcking get stuck
+// think of something
+// think of anything
+// try new approach
+// the solution is here 
+// just think hard 

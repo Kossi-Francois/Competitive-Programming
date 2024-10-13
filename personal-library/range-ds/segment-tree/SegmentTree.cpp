@@ -66,11 +66,11 @@ class SegTree{
     buildTree(0, 0, N-1);
   }
 
-  public: snode merge_children(const snode& v, const snode& w){  //----> to change 
+  private: snode merge_children(const snode& v, const snode& w){  //----> to change 
     return snode::merge(v, w);
   }
 
-  public: void buildTree(int v, int tl, int tr){
+  private: void buildTree(int v, int tl, int tr){
     if(tl == tr){ if(  v < 4*N  &&  tl < N ) {  
       tree[v] =  snode(arr[tl], tl); //----> to check 1
     }}
@@ -85,7 +85,7 @@ class SegTree{
     }
   }
 
-  public: void updateRec(int v, int tl, int tr, int pos){
+  private: void updateRec(int v, int tl, int tr, int pos){
 
     if(tl == tr){
       tree[v] = snode(arr[pos], pos); //----> to check 1
@@ -116,7 +116,7 @@ class SegTree{
     }
   }
 
-  public: snode query(int v, int tl, int tr, int ql, int qr){ 
+  private: snode query(int v, int tl, int tr, int ql, int qr){ 
 			//(root node v = 0; {tl = 0, tr = n-1} tree search space range; {ql = query left, qr = qquery right} query range)
 
     if(qr < ql){ //qery on empty range
@@ -136,7 +136,11 @@ class SegTree{
     }
   }
   
+  public: snode query(int ql, int qr){
+    return query(0, 0, N-1,  ql,  qr);
+  }
 };
+
 
 ///////////////================ ********************* =================//////////////////////
 
@@ -580,126 +584,3 @@ class SegTree2D{
 
 
 
-
-
-
-
-////////// ----- [Mo's algo] --------------///////
-// ( https://cp-algorithms.com/data_structures/sqrt_decomposition.html )
-
-class MoAlgo{
-
-
-  public: static const int blockSize = 600;
-
-
-  public: struct Query{
-    int l, r, idx; //{query left, query right, query index}
-    public: Query(int l, int r, int idx){
-      this->l = l;
-      this->r = r;
-      this->idx = idx;
-    }
-
-    public: Query(){}
-
-    bool operator <(const Query &other){
-      return make_pair(this->l/blockSize, this->r ) < make_pair(other.l/blockSize, other.r);
-    }
-  };
-
-
-  public: 
-    vector<Query> vqu;
-    vector<pair<ll, int>> arr; // {value, index}
-    
-    int n, q;
-    int cur_l = 0, cur_r = -1;
-
-
-   int cnt;
-   vi freq;
-
-
-
-  public: MoAlgo(vector<pair<ll, int>>& _arr, vector<Query>& _vqu){
-    arr =_arr;
-    vqu = _vqu;  sort(all(vqu));
-
-    n = sz(arr);
-    q = sz(vqu);
-
-    compressIdx();
-  }
-
-  void compressIdx(){
-    map<ll, int> compressedIdx;
-    trav(x, arr){ compressedIdx[x.f] = 0; } //sort values
-    int idx = 0;
-    trav(x, compressedIdx){ x.s = idx++; } // add idx to sorted values
-
-    trav(x, arr){ x.s = compressedIdx[x.f]; } // add compressed idx to original arr
-  }
-
-
-  void add(int idx){
-    if(  ++freq[ arr[idx].s ] == 1 ){
-      cnt++;
-    }
-  }
-
-
-  void erase(int idx){
-    if(  --freq[ arr[idx].s ] == 0 ){
-      cnt--;
-    }
-  }
-
-  int get_answer(){
-    return cnt;
-  };
-
-  void move(Query curr_q){
-
-    while (cur_l > curr_q.l)
-    {
-      add(--cur_l);
-    }
-
-    while (cur_r < curr_q.r)
-    {
-      add(++cur_r);
-    }
-
-    while (cur_l < curr_q.l)
-    {
-      erase(cur_l++);
-    }
-
-    while (cur_r > curr_q.r)
-    {
-      erase(cur_r--);
-    }
-  }
-
-
-  public: vl compute_queries(){
-
-    cnt = 0;
-    freq = vi(n, 0);
-
-    vl vans(q);
-    cur_l = 0, cur_r = -1;
-
-    trav(curr_q, vqu){
-
-      move(curr_q);
-
-      vans[curr_q.idx] = get_answer();
-      
-    }
-
-    return vans;
-  }
-
-};
