@@ -1,16 +1,6 @@
 
 
 
-const string ALPHA_NUM_ALL = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-const string DIGITS_ALL    = "0123456789";
-const string ALPHA_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const string ALPHA_LOWER = "abcdefghijklmnopqrstuvwxyz";
-
-
-
-
-
-
 class BitsSet {
 	public :
 		int bitsize;
@@ -61,7 +51,7 @@ class BitsSet {
      * @param  x:  integer to convert
      * @param  n:  length of pdded array, if n < minimum needed size to represent x in bin array, no padding is applied
      * @param  padding:  value of padding
-     * @return binary array in big-endian format (MSB comes first(0)), eg 7 --> 0 1 1 1
+     * @return binary array in big-endian format (MSB comes first(0)), eg 3 --> 0 0 1 1
     */
 		static vi decimalToBinary(ll x, int n, bool padding = 0) {
 			vi ret;
@@ -156,131 +146,21 @@ int xorRange(int l, int r){
   return xorFirstN(l - 1) ^ xorFirstN(r);
 }
 
+bool isPowerOfTwo(ll n){  return (n > 0) && ((n & (n - 1)) == 0);}
 
+ll lsBit(ll n){return (n & -n); } // Least SB
 
-//////////////////////////// --- string ---- /////////////////
-
-bool isPalindrome(string& palinS, int i, int j){
-  while (i <= j) {
-    if (palinS[i] != palinS[j]) {
-      return false;
-    }
-    i++;
-    j--;
-  }
-  return true;
+ll msBit(unsigned long long N) { // Most SB
+  if( N == 0){return 0;} return 1ll << (64 - __builtin_clzll(N) - 1);
 }
 
-
-
-
-/* Overloading * operator for string */
-string operator * (string a, unsigned int b) {
-    string output = "";
-    while (b--) {
-        output += a;
-    }
-    return output;
-}
-
-
-
-ll hamming_distance(string x, string y, ll N)
+unsigned int flipAllExceptK(unsigned int n, unsigned int k)
 {
-    ll dist = 0;
-
-    for(ll i = 0; i<N; i++){
-        if(x[i] != y[i]) dist++;
-    }
-    return dist;
+  /*1) Toggle k-th bit by doing n ^ (1 << k)
+    2) Toggle all bits of the modified number */
+  return ~(n ^ (1 << k));
 }
 
 
-int costAlphaCycle(char a, char b){
-	int aa = a - 'a';
-	int bb = b - 'a';
-
-	if(bb < aa){swap(aa, bb);}
-	
-	return min( bb - aa,   26 - bb + aa   );
-}
-
-
-
-bool issubstring(string str2, string rep1)
-{
-  int M = str2.length();
-  int N = rep1.length();
- 
-  // Check for substring from starting
-  // from i'th index of main string
-  for (int i = 0; i <= N - M; i++) {
-      int j;
-
-      // For current index i,
-      // check for pattern match
-      for (j = 0; j < M; j++)
-          if (rep1[i + j] != str2[j])
-              break;
-
-      if (j == M) // pattern matched
-          return true;
-  }
-
-  return false; // not a substring
-}
-
-
-
-
-
-std::string trim(const std::string & source) {
-    std::string s(source);
-    s.erase(0,s.find_first_not_of(" \n\r\t"));
-    s.erase(s.find_last_not_of(" \n\r\t")+1);
-    return s;
-}
-
-
-
-
-ll stringToInt(string& num) {
-    ll ans = 0ll;
-    trav(digit, num) {
-        ans = ans * 10 + (digit-'0');
-    }
-    return ans;
-}
-
-
-
-template<typename T>
-string join( T& inp, string sep = "" ){
-
-  std::stringstream ss;
-  int i = 0;
-  trav(item, inp)
-  {
-    if(i++ != 0){ ss << sep;   }
-    ss << item;
-  }
-  std::string res = ss.str();
-  return res;
-}
-
-
-vs split( string inputString, char delimiter = ','  ){
-  stringstream ss(inputString); 
-
-  // Tokenize the input string by comma delimiter 
-  string token; 
-  vector<string> tokens; 
-
-  while (getline(ss, token, delimiter)) { 
-    tokens.push_back(token); 
-  } 
-
-  return tokens;
-}
 
 

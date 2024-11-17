@@ -65,6 +65,9 @@ tcT > using VT = vector<T>;
 #define not_in(c, x)  c.find(x) == c.end()
 #define  is_in(c, x)  c.find(x) != c.end()
 
+#define set_intersec(set1, set2, setres) set_intersection( all(set1), all(set2), std::inserter(setres, setres.begin()));
+
+
 
 #define f first
 #define s second
@@ -167,7 +170,24 @@ ll resolve(){
 }
 
 
+void stressTestGen(){
+	int t=100;
+	pll n_range  = {1, 150};
+	pll ai_range = {1, 1e9};
 
+	if(t > 1){cout << t << endl;}
+
+	FOR(i, 0, t){
+		ll n = uid(n_range.f, n_range.s);
+		ll b = uid(ai_range.f, ai_range.s);
+		vl aa(n); trav(x, aa){x = uid(ai_range.f, ai_range.s);}
+		vl bb(n); trav(x, bb){x = uid(ai_range.f, ai_range.s);}
+
+		cout << n << " " << b << endl;
+		cout << aa << endl;
+		cout << bb << endl;
+	}
+}
 
 
 int main() {
@@ -199,4 +219,6 @@ int main() {
 // think of anything
 // try new approach
 // the solution is here 
-// just think hard 
+// just think smart, think hard, think sm-hard
+
+// -- do your best, and if that's not enough, do the best of someone better -- //

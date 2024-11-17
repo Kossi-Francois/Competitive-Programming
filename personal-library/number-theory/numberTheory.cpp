@@ -177,6 +177,28 @@ ll invMod(ll a, ll mod){ return power(a, mod-2, mod); }
 
 
 
+template<typename T>
+class Stirling2 {
+	/** *
+	 * Stirling numbers of the second kind, which count the number of ways to partition a set of n elements into k nonempty subsets 
+	 * 	// https://rosettacode.org/wiki/Stirling_numbers_of_the_second_kind#C++
+	 *	// https://en.wikipedia.org/wiki/Stirling_number
+	 *	// https://codeforces.com/blog/entry/117906
+	*/
+	private:  std::map<std::pair<int, int>, T> cache_;
+	public: T get(int n, int k) {
+		if (k == n){ return 1;  }
+		if (k == 0 || k > n){ return 0;  }
+			
+		pii p = std::make_pair(n, k);
+		if ( is_in(cache_, p)){  return cache_[p]; }
+			
+		return cache_[p] = ((k * get(n - 1, k)) + get(n - 1, k - 1));
+	}
+};
+
+
+
 ////////////////////////////////  primes number //////////////////////////
 
 vector<bool> isPrime; // init to true
