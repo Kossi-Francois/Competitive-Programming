@@ -221,4 +221,5 @@ int main() {
 // the solution is here 
 // just think smart, think hard, think sm-hard
 
-// -- do your best, and if that's not enough, do the best of someone better -- //
+// ----- Do your best, and if that's not enough, do the best of someone better ----- //
+// -- But remember, just because you don't give up, doesn't mean you will make it -- //

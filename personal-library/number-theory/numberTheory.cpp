@@ -135,6 +135,11 @@ void arrModInverse(ll n, ll m)
 
 
 
+/**
+ * @brief compute factorial and inverse factorial, integer inverse modulo p
+ * @param N ubpper bound range of factorial
+ * @param p modulo
+ */
 vl factorial, invFactorial, modInverse;
 void fact_modulo(ll N, ll p)
 {
@@ -167,7 +172,7 @@ ll binomialCoeff(ll n, ll k, ll mod){
     if (k > n){ return 0;  }
     if (k == 0 || k == n){ return 1;  }
 
-    return factorial[n] * invFactorial[k]%mod * invFactorial[n - k]%mod;
+    return ((factorial[n]%mod * invFactorial[k]%mod)%mod * invFactorial[n - k]%mod)%mod;
 }
 
 
@@ -486,7 +491,8 @@ vvi genIntegerPartiton(int n, bool isSorted = true)
 } 
 
 
-template<typename T> void gen_comb(int N, int K, T fun)
+template<typename T> 
+void gen_comb(int N, int K, T fun)
 {
     std::string bitmask(K, 1); // K leading 1's
     bitmask.resize(N, 0); // N-K trailing 0's
@@ -504,6 +510,36 @@ template<typename T> void gen_comb(int N, int K, T fun)
         
     } while (std::prev_permutation(bitmask.begin(), bitmask.end()));
 }
+
+
+template<typename T> 
+void gen_permu(int n, T fun){
+
+	vi idx(n, 0); iota(all(idx), 0);
+	do {
+		fun(idx);
+	} while (next_permutation(all(idx)));
+}
+
+
+/**
+ * @brief  Inclusion-Exclusion principle(aka formule du crible)
+ * @param  k : number of sets
+ * @param  fun : function which computes the cardinality of the intersection
+ * @return cnt : the result of the inclusion-exclusion principle
+**/
+template<class U>
+ll incl_excl_principle(int k, U fun){
+	ll cnt = 0ll;
+	FOR(mask, 1, 1 << k){
+		vi idx;
+		FOR(i, 0, k) if(mask & (1 << i)) { idx.push_back(i);}
+		ll sign = __builtin_popcount(mask) % 2 == 0 ? -1ll : 1ll;
+		cnt += sign * fun(idx);
+	}
+	return cnt;
+}
+
 
 ///////////////////-------------------------------------------------------------/////////////////
 
